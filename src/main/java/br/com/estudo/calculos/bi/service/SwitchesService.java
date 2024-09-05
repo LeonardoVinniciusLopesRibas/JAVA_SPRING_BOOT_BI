@@ -37,6 +37,7 @@ public class SwitchesService {
                             switches.getImobilizado().toLowerCase().contains(lowerCaseQuery);
                     return matches;
                 })
+
                 .map(switches -> new Switches(
                         switches.getRegistro(),
                         switches.getData(),
@@ -50,6 +51,12 @@ public class SwitchesService {
                         switches.getVersao(),
                         switches.getImobilizado()
                 ))
+                .collect(Collectors.toMap(
+                        s -> s.getIp_address() + "_" + s.getNum_serie(),
+                        s -> s,
+                        (existing, replacement) -> existing)) 
+                .values()
+                .stream()
                 .collect(Collectors.toList());
     }
 }
